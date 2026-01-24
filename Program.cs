@@ -100,34 +100,19 @@ class Exercicio
                 case 1:
                     if (escolha == 1)
                     {
-                    OperarConta("DEPOSITO");
+                    SacarConta(contas);
                     }
                     break;
 
                 case 2:
                     if (escolha == 2)
                     {
-                    OperarConta("SAQUE");
+                    DepositarConta(contas);
                     }
                     break;
 
                 case 3:
-                  if (escolha == 3)
-                    {
-                    Console.WriteLine("Digite o ID da conta: ");
-                    int idCheck = int.Parse(Console.ReadLine() ?? "0");
-                    ContaBancaria ContaSelecionada = ProcurarContaPorId(contas, idCheck);
-                    
-                    if(ContaSelecionada == null)
-                        {
-                            Console.WriteLine("Id não encontrado");
-                        } else
-                        {
-                            Console.WriteLine("Digite o id da conta há depositar: ");
-                            
-                            
-                        }
-                    }
+                    ValidarConta(contas);
                     break;
 
                 case 4:
@@ -162,42 +147,42 @@ class Exercicio
         return null;
     }
 
-    public static void OperarConta(List<ContaBancaria> contas, string tipoOperacao)
+    public static ContaBancaria ValidarConta(List<ContaBancaria> contas)
     {
-        if (tipoOperacao == "SAQUE")
-        {
-            Console.WriteLine("Digite o ID da conta: ");
-            int idCheck = int.Parse(Console.ReadLine() ?? "0");
-            ContaBancaria ContaSelecionada = ProcurarContaPorId(contas, idCheck);
-                            
-            if(ContaSelecionada == null)
-            {
-            Console.WriteLine("Id não encontrado");
-            } else
-            {
-            Console.WriteLine("Valor a sacar: ");
-            double valor = double.Parse(Console.ReadLine() ?? "0");
-            ContaSelecionada.Sacar(valor);
-            }
-        }
+        Console.WriteLine("Digite o ID da conta: ");
+        int idCheck = int.Parse(Console.ReadLine() ?? "0");
+        ContaBancaria ContaSelecionada = ProcurarContaPorId(contas, idCheck);
 
-        if (tipoOperacao == "DEPOSITO")
+        if(ContaSelecionada == null)
         {
-            Console.WriteLine("Digite o ID da conta: ");
-            int idCheck = int.Parse(Console.ReadLine() ?? "0");
-            ContaBancaria ContaSelecionada = ProcurarContaPorId(contas, idCheck);
-                            
-            if(ContaSelecionada == null)
-            {
-            Console.WriteLine("Id não encontrado");
-            } else
-            {
-            Console.WriteLine("Valor a depositar: ");
+            Console.WriteLine("ID não identificado.");
+            return null;
+        } 
+            return ContaSelecionada;
+    }
+
+    public static void DepositarConta(List<ContaBancaria> contas)
+    {
+        ContaBancaria conta = ValidarConta(contas);
+        if (conta != null)
+        {
+            Console.WriteLine("Digite o valor a depositar: ");
             double valor = double.Parse(Console.ReadLine() ?? "0");
-            ContaSelecionada.Depositar(valor);
-            }
+            conta.Depositar(valor);
         }
     }
+
+    public static void SacarConta(List<ContaBancaria> contas)
+    {
+        ContaBancaria conta = ValidarConta(contas);
+        if (conta != null)
+        {
+            Console.WriteLine("Digite o valor a sacar: ");
+            double valor = double.Parse(Console.ReadLine() ?? "0");
+            conta.Sacar(valor);
+        }
+    }
+
     public void Transferir(string id, double valor)
     {
         
