@@ -100,28 +100,61 @@ class Exercicio
                 case 1:
                     if (escolha == 1)
                     {
-                    Console.WriteLine("Digite o valor a depositar: ");
-                    double deposito = double.Parse(Console.ReadLine() ?? "0");
-                    Depositar(deposito);
+                    Console.WriteLine("Digite o ID da conta: ");
+                    int idCheck = int.Parse(Console.ReadLine() ?? "0");
+                    ContaBancaria ContaSelecionada = ProcurarContaPorId(contas, idCheck);
+                    
+                    if(ContaSelecionada == null)
+                        {
+                            Console.WriteLine("Id não encontrado");
+                        } else
+                        {
+                            Console.WriteLine("Valor a depositar: ");
+                            double valor = double.Parse(Console.ReadLine() ?? "0");
+                            ContaSelecionada.Depositar(valor);
+                        }
                     }
                     break;
 
                 case 2:
+                    if (escolha == 2)
+                    {
+                    OperarConta(contas , "SAQUE");
+
+                    }
                     break;
 
                 case 3:
+                  if (escolha == 3)
+                    {
+                    Console.WriteLine("Digite o ID da conta: ");
+                    int idCheck = int.Parse(Console.ReadLine() ?? "0");
+                    ContaBancaria ContaSelecionada = ProcurarContaPorId(contas, idCheck);
+                    
+                    if(ContaSelecionada == null)
+                        {
+                            Console.WriteLine("Id não encontrado");
+                        } else
+                        {
+                            Console.WriteLine("Digite o id da conta há depositar: ");
+                            
+                            
+                        }
+                    }
                     break;
 
                 case 4:
+                    Console.WriteLine("Programa encerrado. ");
+                    rodando = false;
                     break;
 
                 default:
                     Console.WriteLine("Opção invalida. ");
+                    rodando = false;
                     break;
             }
         }
     }
-
 
     private static Random rnd = new Random();
 
@@ -136,11 +169,34 @@ class Exercicio
         {
             if (id == p.Id)
             {
-                return ContaBancaria;
+                return p;
+            } 
+        }
+        return null;
+    }
+
+    public static void OperarConta(List<ContaBancaria> contas, string tipoOperacao)
+    {
+        if (tipoOperacao == "SAQUE")
+        {
+            Console.WriteLine("Digite o ID da conta: ");
+            int idCheck = int.Parse(Console.ReadLine() ?? "0");
+            ContaBancaria ContaSelecionada = ProcurarContaPorId(contas, idCheck);
+                            
+            if(ContaSelecionada == null)
+            {
+            Console.WriteLine("Id não encontrado");
             } else
             {
-                return null;
+            Console.WriteLine("Valor a sacar: ");
+            double valor = double.Parse(Console.ReadLine() ?? "0");
+            ContaSelecionada.Sacar(valor);
             }
+        }
+
+        if (tipoOperacao == "DEPOSITO")
+        {
+            
         }
     }
 }
