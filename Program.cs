@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.Common;
+using System.Diagnostics.Contracts;
 class Exercicio
 {
     public class ContaBancaria
@@ -53,6 +56,31 @@ class Exercicio
                 Console.WriteLine("Saque realizado com sucesso! ");
             }
         }
+
+        public void TransferirValor(double valor, int idTranferir)
+        {
+            if (Saldo - valor <= 0)
+            {
+                Console.WriteLine("Erro! saldo insuficiente para a transferencia");
+            } else
+            {
+                Saldo -= valor;
+                Console.WriteLine($"Transferencia realizado com sucesso para o ID: {idTranferir}");
+            }
+        }
+
+        public void ReceberValorTransferido(double valor, int idReceber)
+        {
+            if (valor <= 0)
+            {
+                Console.WriteLine("Erro valor negativo");
+            } else
+            {
+            Saldo += valor;
+            Console.WriteLine($"Transferencia recebida do ID: {idReceber}");
+            }
+        }
+
     }
 
     static void Main()
@@ -100,19 +128,35 @@ class Exercicio
                 case 1:
                     if (escolha == 1)
                     {
-                    SacarConta(contas);
+                    Console.WriteLine("Digite o ID da conta: ");
+                    int idCheck = int.Parse(Console.ReadLine()?? "0");
+                    SacarConta(contas, idCheck);
                     }
                     break;
 
                 case 2:
                     if (escolha == 2)
                     {
-                    DepositarConta(contas);
+                    Console.WriteLine("Digite o ID da conta: ");
+                    int idCheck = int.Parse(Console.ReadLine() ?? "0");
+                    DepositarConta(contas, idCheck);
                     }
                     break;
 
                 case 3:
-                    ValidarConta(contas);
+                    if (escolha == 3)
+                    {
+                    Console.WriteLine("Valor a transferir");
+                    double valor = int.Parse(Console.ReadLine());
+
+                    Console.WriteLine("Digite o id da conta a receber: ");
+                    int idReceber = int.Parse(Console.ReadLine() ?? "0");
+
+                    Console.WriteLine("Digite o id da sua conta a transferir: ");
+                    int idTransferir = int.Parse(Console.ReadLine() ?? "0");
+
+                    Transferencia(contas, idTransferir, idReceber, valor);
+                    }
                     break;
 
                 case 4:
@@ -147,10 +191,8 @@ class Exercicio
         return null;
     }
 
-    public static ContaBancaria ValidarConta(List<ContaBancaria> contas)
+    public static ContaBancaria ValidarConta(List<ContaBancaria> contas, int idCheck)
     {
-        Console.WriteLine("Digite o ID da conta: ");
-        int idCheck = int.Parse(Console.ReadLine() ?? "0");
         ContaBancaria ContaSelecionada = ProcurarContaPorId(contas, idCheck);
 
         if(ContaSelecionada == null)
@@ -161,9 +203,9 @@ class Exercicio
             return ContaSelecionada;
     }
 
-    public static void DepositarConta(List<ContaBancaria> contas)
+    public static void DepositarConta(List<ContaBancaria> contas, int idCheck)
     {
-        ContaBancaria conta = ValidarConta(contas);
+        ContaBancaria conta = ValidarConta(contas, idCheck);
         if (conta != null)
         {
             Console.WriteLine("Digite o valor a depositar: ");
@@ -172,9 +214,9 @@ class Exercicio
         }
     }
 
-    public static void SacarConta(List<ContaBancaria> contas)
+    public static void SacarConta(List<ContaBancaria> contas, int idCheck)
     {
-        ContaBancaria conta = ValidarConta(contas);
+        ContaBancaria conta = ValidarConta(contas, idCheck);
         if (conta != null)
         {
             Console.WriteLine("Digite o valor a sacar: ");
@@ -183,8 +225,38 @@ class Exercicio
         }
     }
 
-    public void Transferir(string id, double valor)
+
+
+    static void Transferencia(List<ContaBancaria> contas, int IdTransferir, int IdReceber, double valor)
     {
-        
+        if (ValidarConta(contas, IdTransferir) != null && ValidarConta(contas, IdReceber) != null)
+        {
+            TransferirValor(contas, IdTransferir, valor);
+            ReceberTransferencia(contas, IdReceber, valor);
+        } else
+        {
+            Console.WriteLine("Erro! id não encontrado");
+        }
     }
+
+    public static void ReceberTransferencia(List<ContaBancaria> contas, int idCheck, double valor)
+    {
+        ContaBancaria conta = ValidarConta(contas, idCheck);
+        if (conta != null)
+        {
+            conta.ReceberValorTransferido(valor, idCheck);
+        }
+    }
+
+
+    public static void TransferirValor(List<ContaBancaria> contas, int idCheck, double valor)
+    {
+        ContaBancaria conta = ValidarConta(contas, idCheck);
+        if (conta != null)
+        {
+            conta.TransferirValor(valor, idCheck);
+        }
+    }
+
+
 }
