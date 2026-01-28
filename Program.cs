@@ -168,7 +168,7 @@ namespace SistemaBancario
             Console.WriteLine($"Saldo atual: R$ {conta.ObterSaldo():F2}");
         }
 
-        // ================= LEITURA SEGURA =================
+        // ================= LEITURA SEGURA ==================
 
         static int LerInt()
         {
@@ -195,7 +195,7 @@ namespace SistemaBancario
         }
     }
 
-    // ================= CLASSE CONTA =================
+    // ================= CLASSE CONTA ==================
 
     class ContaBancaria
     {
